@@ -15,6 +15,7 @@ const routes = [
     { path: '/login', component: Login },
     { path: '/index/', component: Index },
     { path: '/serie/:id', component: Serie },
+    /* Testing */
 ];
 
 // Create router instance and pass the routes

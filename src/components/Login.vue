@@ -93,6 +93,7 @@
                             this.SessionKey = resp.data;
                             console.log(this.SessionKey.session_id);
                             localStorage.setItem('username', this.username);
+                            localStorage.setItem('sessionKey', this.SessionKey.session_id);
                             this.$router.push('/index/');
                         })
                         .catch((error) => {
