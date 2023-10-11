@@ -21,7 +21,6 @@ const routes = [
     { path: '/index/', component: Index },
     //{ path: '/serie/:id', component: Serie },
     { path: '/actors', component: Actors},
-];
     { path: '/serie/:id', component: Serie },
     /* Testing */
     {
@@ -29,7 +28,8 @@ const routes = [
         name: 'MovieDetails',
         component: MovieDetails,
       },
-    ];
+];
+    
 
 
 // Create router instance and pass the routes
