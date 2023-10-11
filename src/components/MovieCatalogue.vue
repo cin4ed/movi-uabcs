@@ -1,7 +1,5 @@
 <script>
     import { createApp } from 'vue';
-    import axios from 'axios';
-    import VueAxios from 'vue-axios';
     
     const app = createApp();
 
@@ -162,9 +160,7 @@
                 <!-- posibilidad de interactuar con el -->
                 <li v-for="movie in movieData.results" :key="movie.id" class="hover-movement">
                     <img :src="'https://image.tmdb.org/t/p/w185' + movie.poster_path" style="width: 80%; border-radius: 20px;">
-                    <router-link :to="'/movie/' + movie.id">Ver detalles</router-link>
                 </li>
-                
             </ul>
             <div v-else>
                 <!-- Mensaje al usuario donde no se pudieron encontrar las peliculas -->
@@ -197,9 +193,6 @@
         color: white;
         width: 100%;
         height: 300px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* sombra */
-        margin-bottom: 20px; /* Espacio entre elementos */
-        border-radius: 8px; /* Agrega bordes redondeados a los elementos */
     }
     ul{
         /* Color del fondo del contenedor de elementos */
@@ -217,11 +210,9 @@
     }
     .ul-container{
         display: flex;
-    flex-wrap: wrap; /* Permite que los elementos fluyan en varias filas si es necesario */
-    justify-content: center;
-    align-items: flex-start; /* Alinea los elementos en la parte superior */
-    width: 100%;
-    max-width: 1200px; /* Limita el ancho máximo para una mejor legibilidad */
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     }
     .hover-movement:hover{
         transition: transform 0.5s;
@@ -229,11 +220,5 @@
         /* Cambio del icono del mouse */
         cursor: pointer;
     }
-    select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
 
 </style>

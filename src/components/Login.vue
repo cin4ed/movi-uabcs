@@ -1,3 +1,20 @@
+<template>
+    <div class="global-container">
+        <p class="page-title" v-if="dataLoaded"> {{ pageName }}</p>    
+        <div class="login-container" v-if="Login">
+            <form @submit.prevent="iniciarSesion">
+                <input type="text" v-model="username" placeholder="Usuario">
+                <input type="password" v-model="password" placeholder="Contraseña">
+                <button type="submit"> Entrar </button>
+            </form>
+        </div>
+        <div class="menu-options" v-else>
+            <button @click="showLoginForm(true)">Login</button>
+            <button @click="destroySession">Destroy Session Debug</button>
+        </div>
+    </div>
+</template>
+
 <script>
     import { createApp } from 'vue';
     import axios from 'axios';
@@ -21,6 +38,7 @@
                 AppTitle: '',
                 constants: {},
                 dataLoaded: false,
+                /* Esta va para el kenneth */
             };
         },
         created(){
@@ -43,12 +61,8 @@
         mounted(){
                 /* Importacion de colores del json */
                 console.log("username:"+localStorage.getItem('username'));
-                app.axios.get('https://api.themoviedb.org/3/authentication/token/new',{
-                    headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YTcxYTExM2RkZGQ4ZDQ3NmU4YjhlMDdkYjgzYmI5ZCIsInN1YiI6IjY1MTlkOTY1MDcyMTY2MDEzOWM1ZDQ4MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fvwRaFzNROAhNcfeY1qE_fR1eUi4rKTly4QCrm8u-C4',
-                        'accept': 'application/json'
-                    }
-                })
+                /* Se manda la peticion para un requestToken con los datos del header cargados en una variable */
+                app.axios.get('https://api.themoviedb.org/3/authentication/token/new',this.$APIHeaders)
                 .then((resp)=>{
                     //Almacenamos nuestro request token generado para logear al usuario a futuro.
                     this.requestoken = resp.data.request_token;
@@ -66,13 +80,7 @@
                 'username': this.username,
                 'password': this.password,
                 'request_token': this.requestoken
-                }, {
-                    headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YTcxYTExM2RkZGQ4ZDQ3NmU4YjhlMDdkYjgzYmI5ZCIsInN1YiI6IjY1MTlkOTY1MDcyMTY2MDEzOWM1ZDQ4MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fvwRaFzNROAhNcfeY1qE_fR1eUi4rKTly4QCrm8u-C4',
-                        'accept': 'application/json',
-                        'content-type': 'application/json'
-                    }
-                })
+                }, this.$APIHeaders)
                 .then((resp)=>{
                     this.movieData = resp.data; //Almacenamos la informacion en una variable local
                     // Se cambia el estado del Loading para que se muestren los resultados 
@@ -80,16 +88,12 @@
 
                         app.axios.post('https://api.themoviedb.org/3/authentication/session/new', {
                             'request_token': this.requestoken
-                        }, {
-                            headers: {
-                                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YTcxYTExM2RkZGQ4ZDQ3NmU4YjhlMDdkYjgzYmI5ZCIsInN1YiI6IjY1MTlkOTY1MDcyMTY2MDEzOWM1ZDQ4MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fvwRaFzNROAhNcfeY1qE_fR1eUi4rKTly4QCrm8u-C4', // Reemplaza con tu token de acceso
-                                'accept': 'application/json',
-                            },
-                        })
+                        }, this.$APIHeaders)
                         .then((resp) => {
                             this.SessionKey = resp.data;
                             console.log(this.SessionKey.session_id);
                             localStorage.setItem('username', this.username);
+                            localStorage.setItem('sessionKey', this.SessionKey.session_id);
                             this.$router.push('/index/');
                         })
                         .catch((error) => {
@@ -116,23 +120,6 @@
         
     }
 </script>
-
-<template>
-    <div class="global-container">
-        <p class="page-title" v-if="dataLoaded"> {{ pageName }}</p>    
-        <div class="login-container" v-if="Login">
-            <form @submit.prevent="iniciarSesion">
-                <input type="text" v-model="username" placeholder="Usuario">
-                <input type="password" v-model="password" placeholder="Contraseña">
-                <button type="submit"> Entrar </button>
-            </form>
-        </div>
-        <div class="menu-options" v-else>
-            <button @click="showLoginForm(true)">Login</button>
-            <button @click="destroySession">Destroy Session Debug</button>
-        </div>
-    </div>
-</template>
 
 <style>
     *{
