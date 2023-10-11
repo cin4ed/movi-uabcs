@@ -30,6 +30,7 @@
             <!-- posibilidad de interactuar con el -->
             <li v-for="movie in movieData.results" :key="movie.id">
                 <img :src="'https://image.tmdb.org/t/p/w185' + movie.poster_path">
+                <router-link :to="'/movie/' + movie.id">Ver detalles</router-link>
             </li>
         </ul>
         <div v-else>
