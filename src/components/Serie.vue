@@ -1,3 +1,9 @@
+<script setup>
+  import { ref } from "vue";
+  const movie = ref("loki");
+</script>
+
 <template>
-  <h1>Hello world</h1>
+  <h1>{{ movie }}</h1>
+  hola victor
 </template>
