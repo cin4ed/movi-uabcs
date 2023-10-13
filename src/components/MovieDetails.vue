@@ -1,14 +1,24 @@
 
 <template>
-    <div class="movie-details">
+    <div class="movie-details" :style="backgroundImageStyle">
       <div v-if="movie" class="movie-poster">
-        <img :src="'https://image.tmdb.org/t/p/w185' + movie.poster_path" :alt="movie.title" />
+        <img :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path" :alt="movie.title" class="rounded-poster" />
       </div>
       <div class="movie-info" v-if="movie">
         <h1>{{ movie.title }}</h1>
         <p>Puntuación: {{ movie.vote_average }}</p>
+        <h3>Duración:</h3>
+      <p>{{ movie.runtime }} minutos</p>
         <h3>Resumen:</h3>
         <p>{{ movie.overview }}</p>
+        <h3>Fecha de Lanzamiento:</h3>
+      <p>{{ movie.release_date }}</p>
+      <h3>Géneros:</h3>
+      <ul class="genres">
+        <li v-for="genre in (movie.genres ? movie.genres : [])" :key="genre.id">
+          {{ genre.name }}
+        </li>
+      </ul> 
       </div>
     </div>
     <!-- información adicional -->
@@ -113,6 +123,19 @@ export default {
   embedUrl() {
     return `https://www.youtube.com/embed/${this.trailerId}`;
   },
+  backgroundImageStyle() {
+      if (this.movie && this.movie.backdrop_path) {
+        const backgroundImageUrl = `https://image.tmdb.org/t/p/original${this.movie.backdrop_path}`;
+        return {
+          'background-image': `url(${backgroundImageUrl})`,
+          
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          
+        };
+      }
+      return {}; 
+    },
 },
   mounted() {
     const movieId = this.$route.params.id;
@@ -223,12 +246,19 @@ goToMovieDetails(movieId) {
 
 
 <style scoped>
+
+.rounded-poster {
+  max-width: 100%;
+  border-radius: 15px; 
+  box-shadow: 0 10px 10px rgba(255, 255, 255, 0.1); 
+}
 .movie-details {
     background-color: rgb(36, 2, 124);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .movie-poster img {
@@ -242,6 +272,17 @@ goToMovieDetails(movieId) {
 
 .movie-info h1, .movie-info p, .movie-info ul {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.genres {
+  list-style: none;
+  padding: 0;
+}
+
+.genres li { 
+  display: inline-block; 
+  margin-right: 10px;
+  font-size: 1.1em;
 }
 
 .keywords {
