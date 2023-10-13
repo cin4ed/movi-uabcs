@@ -122,9 +122,6 @@
 </script>
 
 <style>
-    *{
-        font-family: 'Luminari', sans-serif;
-    }
     .login-container, .menu-options{
         background-color: white;
         display: flex;
