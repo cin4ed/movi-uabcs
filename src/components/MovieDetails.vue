@@ -1,6 +1,7 @@
 
 <template>
     <div class="movie-details" :style="backgroundImageStyle">
+      
       <div v-if="movie" class="movie-poster">
         <img :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path" :alt="movie.title" class="rounded-poster" />
       </div>
@@ -293,6 +294,7 @@ goToMovieDetails(movieId) {
 .keywords li {
   display: inline-block; 
   margin-right: 10px;
+  margin-top: 15px;
   font-size: 1.1em;
   
 }
@@ -311,22 +313,16 @@ goToMovieDetails(movieId) {
     background-color: #0056b3; 
   }
 
-  .general-info {
+.general-info {
   display: flex;
   justify-content: space-evenly; 
-  margin: 0;
-  flex: 1;
-  
   background-color: #336eac; 
   color: white;
-  padding: 5px 10px;
   border: 1px solid #000000;
   border-radius: 5px; 
   cursor: default;
   font-size: 1.1em;
 }
-
-
 
 ul {
   list-style: none;
