@@ -9,6 +9,7 @@ import Login from './components/Login.vue';
 import Actors from './components/ActorsCatalogue.vue';
 import Serie from './components/Serie.vue';
 import MovieDetails from './components/MovieDetails.vue';
+import ActorsDetails from "./components/ActorsDetails.vue"
 
 // Define routes
 const routes = [
@@ -21,7 +22,18 @@ const routes = [
         path: '/movie/:id',
         name: 'MovieDetails',
         component: MovieDetails,
+<<<<<<< Updated upstream
 	},
+=======
+      },
+      {
+
+        path: "/actor/:id",
+        name: "actorsDetails",
+        component: ActorsDetails,
+
+      },
+>>>>>>> Stashed changes
 ];
 
 // Create router instance and pass the routes
