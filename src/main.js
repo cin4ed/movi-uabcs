@@ -9,7 +9,8 @@ import Login from './components/Login.vue';
 import Actors from './components/ActorsCatalogue.vue';
 import Serie from './components/Serie.vue';
 import MovieDetails from './components/MovieDetails.vue';
-import ActorsDetails from "./components/ActorsDetails.vue"
+import ActorsDetails from "./components/ActorsDetails.vue";
+import SeasonDetails from "./components/SeasonDetails.vue";
 
 // Define routes
 const routes = [
@@ -31,6 +32,7 @@ const routes = [
         component: ActorsDetails,
 
       },
+    { path: '/SeasonDetails', component: SeasonDetails },
 ];
 
 // Create router instance and pass the routes
