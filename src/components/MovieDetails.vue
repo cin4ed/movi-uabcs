@@ -11,11 +11,34 @@
         <p>{{ movie.overview }}</p>
       </div>
     </div>
+    <!-- información adicional -->
+    <div class="additional-info">
+      <div class="general-info">
+      <h3>Estado de la película:</h3>
+      <p>{{ movie ? movie.status : 'Cargando...' }}</p>
+
+      <h3>Idioma original:</h3>
+      <p>{{ movie ? movie.original_language : 'Cargando...' }}</p>
+
+      <h3>Presupuesto:</h3>
+      <p>{{ movie ? formatCurrency(movie.budget) : 'Cargando...' }}</p>
+
+      <h3>Ingresos:</h3>
+      <p>{{ movie ? formatCurrency(movie.revenue) : 'Cargando...' }}</p>
+    </div>
+      <h3>Palabras clave:</h3>
+      <ul class="keywords">
+        <li v-for="keyword in (movie ? movie.keywords : [])">
+          <span class="keyword-button">{{ keyword ? keyword.name : 'Cargando...' }}</span>
+        </li>
+      </ul>
+    </div>
+    <!-- Actores -->
     <h2 v-if="cast.length">Actores principales:</h2>
     <div class="actors-container" v-if="cast.length">
       <ul class="actor-list">
         <li v-for="actor in cast" :key="actor.id">
-          <div class="actor">
+          <div v-if="actor.profile_path" class="actor">
             <img :src="'https://image.tmdb.org/t/p/w185' + actor.profile_path" :alt="actor.name" />
             <p class="actor-name">{{ actor.name }}</p>
             <p class="character-name">{{ actor.character }}</p>
@@ -24,8 +47,8 @@
       </ul>
     </div>
  <!-- Reseñas -->
- <h2 v-if="reviews.length">Reseñas:</h2>
     <div class="review-container" v-if="reviews.length">
+      <h2 v-if="reviews.length">Reseñas:</h2>
       <ul>
         <li v-for="(review, index) in reviews" :key="review.id">
           <div class="review" v-if="showAllReviews || index === 0">
@@ -39,8 +62,10 @@
       </button>
     </div>
   <!-- Trailer -->
-  <h2 >Trailer:</h2>
+  
+  
   <div class="video-container" v-if="trailerId">
+    <h2 class="video-title" >Trailer:</h2>
     <iframe
       width="560"
       height="315"
@@ -49,9 +74,22 @@
       allowfullscreen
     ></iframe>
   </div>
-    
-  
-
+  <!-- Recomendaciones -->
+<h2 v-if="recommendations.length">Recomendaciones:</h2>
+<div class="recommendations" v-if="recommendations.length">
+  <div class="recommendations-container">
+    <ul class="recommendation-list">
+      <li v-for="recommendation in recommendations" :key="recommendation.id">
+        <div v-if="recommendation.poster_path" class="recommendation" @click="goToMovieDetails(recommendation.id)">
+          <router-link :to="'/movie/' + recommendation.id">
+            <img :src="'https://image.tmdb.org/t/p/w185' + recommendation.poster_path" :alt="recommendation.title" />
+            <p class="recommendation-title">{{ recommendation.title }}</p>
+          </router-link>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
 </template>
   
   
@@ -68,6 +106,7 @@ export default {
       showAllReviews: false,
       trailerUrl: '',
       trailerId: null,
+      recommendations: [],
     };
   },
   computed: {
@@ -82,8 +121,10 @@ export default {
     this.getMovieDetails(movieId);
     this.getMovieReviews(movieId);
     this.getMovieTrailer(movieId);
+    this.getMovieRecommendations(movieId);
   },
   methods: {
+    // Solicitud para obtener detalles
     async getMovieDetails(movieId) {
       try {
         const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d';
@@ -91,6 +132,11 @@ export default {
 
         const response = await axios.get(apiUrl);
         this.movie = response.data;
+
+        this.movie.budget = this.movie.budget || 0;
+        this.movie.revenue = this.movie.revenue || 0;
+
+        this.getMovieKeywords(movieId);
 
         // Solicitud para obtener actores
         const creditsUrl = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}`;
@@ -100,6 +146,18 @@ export default {
         console.error('Error al obtener detalles de la película:', error);
       }
     },
+    // Solicitud para obtener palabras clave
+    async getMovieKeywords(movieId) {
+      try {
+        const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d';
+        const keywordsUrl = `https://api.themoviedb.org/3/movie/${movieId}/keywords?api_key=${apiKey}`;
+        const response = await axios.get(keywordsUrl);
+        this.movie.keywords = response.data.keywords;
+      } catch (error) {
+        console.error('Error al obtener palabras clave de la película:', error);
+      }
+    },
+    // Solicitud para obtener reviews
     async getMovieReviews(movieId) {
       try {
         const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d';
@@ -115,6 +173,7 @@ export default {
     toggleReviewsVisibility() {
       this.showAllReviews = !this.showAllReviews;
     },
+    // Solicitud para obtener el trailer 
     async getMovieTrailer(movieId) {
       try {
         const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d';
@@ -133,7 +192,32 @@ export default {
       console.error('Error al obtener el tráiler de la película:', error);
     }
 },
+// Solicitud para obtener recomendaciones
+async getMovieRecommendations(movieId) {
+  try {
+    const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d'; 
+    const recommendationsUrl = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${apiKey}&language=es-MX`;
+
+    const response = await axios.get(recommendationsUrl);
+    this.recommendations = response.data.results;
+  } catch (error) {
+    console.error('Error al obtener recomendaciones de películas:', error);
+  }
+},
+// Solicitud para obtener reviews
+goToMovieDetails(movieId) {
+    
+    this.$router.go();
   },
+// Solicitud para obtener el money la pasta la guita la feria la lana
+  formatCurrency(value) {
+      return new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+      }).format(value);
+    },
+},
+ 
 };
 </script>
 
@@ -160,14 +244,55 @@ export default {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
+.keywords {
+  list-style: none;
+  padding: 0;
+}
+
+.keywords li {
+  display: inline-block; 
+  margin-right: 10px;
+  font-size: 1.1em;
+  
+}
+
+.keyword-button {
+  background-color: #007BFF; 
+  color: white;
+  padding: 5px 10px;
+  border: 1px solid #000000;
+  border-radius: 5px; 
+  cursor: default;
+  font-size: 1.1em;
+}
+
+.keyword-button:hover {
+    background-color: #0056b3; 
+  }
+
+  .general-info {
+  display: flex;
+  justify-content: space-evenly; 
+  margin: 0;
+  flex: 1;
+  
+  background-color: #336eac; 
+  color: white;
+  padding: 5px 10px;
+  border: 1px solid #000000;
+  border-radius: 5px; 
+  cursor: default;
+  font-size: 1.1em;
+}
+
+
+
 ul {
   list-style: none;
   padding: 0;
 }
 
-li {
-  margin-bottom: 5px;
-}
+
 
 .actor-list {
   overflow-x: auto;
@@ -201,11 +326,10 @@ li {
   
 }
 
-.actor img {
-  max-width: 100%;
-  border: 2px solid #000;
-  border-radius: 50%; /* imagen redonda */
-  margin-bottom: 5px;
+.actor-image {
+  width: 100px; 
+  height: 100px; 
+  object-fit: cover; 
 }
 
 
@@ -229,12 +353,13 @@ li {
   
 }
 
+
 .review-container {
   margin: 0 auto;
   text-align: left;
   background-color: rgba(184, 184, 184, 0.6); 
   border-radius: 10px; 
-  max-width: 800px; /* ancho reseñas*/
+  max-width: 800px; 
   padding: 20px;
 }
 
@@ -255,8 +380,66 @@ li {
   color: black;
 }
 .video-container {
+  margin-top: 30px;
+  padding: 10px;
+  text-align: center;
   display: flex;
-  justify-content: center; 
+  flex-direction: column; 
+  align-items: center; 
 }
+
+.video-title {
+  margin-bottom: 30px; 
+  font-size: 1.5em;
+  color: rgb(0, 0, 0); 
+}
+
+.recommendations {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.recommendations-container {
+  display: flex;
+  gap: 20px;
+}
+
+.recommendation-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  white-space: nowrap;
+  gap: 20px;
+}
+
+.recommendation {
+  cursor: pointer;
+  text-align: center;
+  width: 150px; 
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.recommendation img {
+  max-width: 100%;
+  border: 2px solid #000;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.recommendation-title {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333;
+}
+
 </style>
   
