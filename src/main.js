@@ -42,6 +42,10 @@ const router = createRouter({
 });
 
 const app = createApp(App);
+
+// Variables globales
+app.config.globalProperties.API_KEY = '6a71a113dddd8d476e8b8e07db83bb9d';
+
 //Esta es la manera de declarar variables gloables:
 app.config.globalProperties.$APIHeaders = {
     headers:{
@@ -50,9 +54,6 @@ app.config.globalProperties.$APIHeaders = {
         'content-type': 'application/json'
     }
 };
-//Y para llamarlas desde cualquier componente, se hace así:
-// {{ this.$variable }}
-//Cómo si de una variable local se estuviera tratando.
 
 app.use(router);
 app.mount('#app');
