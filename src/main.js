@@ -22,18 +22,15 @@ const routes = [
         path: '/movie/:id',
         name: 'MovieDetails',
         component: MovieDetails,
-<<<<<<< Updated upstream
+
 	},
-=======
-      },
-      {
+    {
 
         path: "/actor/:id",
         name: "actorsDetails",
         component: ActorsDetails,
 
       },
->>>>>>> Stashed changes
 ];
 
 // Create router instance and pass the routes
