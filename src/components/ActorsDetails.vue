@@ -2,7 +2,7 @@
     <div class="container">
        <div class="profile" >
 
-        <img class="img_profile" width="300" height="450" src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2/2v9FVVBUrrkW2m3QOcYkuhq9A6o.jpg"/>
+        <img class="img_profile" height="450" width="300" :src="'https://image.tmdb.org/t/p/w300' + this.actor.profile_path"/>
         <ul class="social_media">
 
             <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
@@ -18,23 +18,17 @@
             <h3>Biografía</h3>
             <p>
 
-                Gary Leonard Oldman (born 21 March 1958) is an English actor and filmmaker. Regarded as one of the best actors of his generation, he is known for his versatility and intense acting style. He received various accolades, including an Academy Award, a Golden Globe Award, a Screen Actors Guild Award, and three British Academy Film Awards. His films have grossed over $11 billion worldwide, making him one of the highest-grossing actors to date.
-
-                Oldman began acting in theatre in 1979 and made his film debut in Remembrance (1982). He continued to follow a stage career in London's Royal Court and was a member of the Royal Shakespeare Company, with credits including Cabaret, Romeo and Juliet, Entertaining Mr Sloane, Saved, The Country Wife and Hamlet. He rose to prominence in British film with his portrayals of Sid Vicious in Sid and Nancy (1986), Joe Orton in Prick Up Your Ears (1987) and Rosencrantz in Rosencrantz & Guildenstern Are Dead (1990), while also attracting attention as the leader of a gang of football hooligans in the television film The Firm (1989). Regarded as a member of the "Brit Pack", he achieved greater recognition as a New York gangster in State of Grace (1990), Lee Harvey Oswald in JFK (1991) and Count Dracula in Bram Stoker's Dracula (1992).
-
-                Oldman portrayed the villains in films such as True Romance (1993), The Fifth Element (1997), Air Force One (1997) and The Contender (2000); corrupt DEA agent Norman Stansfield, whom he played in Léon: The Professional (1994), was called one of cinema's best villains. He also played Ludwig van Beethoven in Immortal Beloved (1994) and later appeared in franchise roles such as Sirius Black in the Harry Potter series, James Gordon in The Dark Knight Trilogy (2005–2012) and a human leader, Dreyfus in Dawn of the Planet of the Apes (2014). He won the Academy Award for Best Actor for his role as Winston Churchill in Darkest Hour (2017), and was nominated for his portrayals of George Smiley in Tinker Tailor Soldier Spy (2011) and Herman J. Mankiewicz in Mank (2020).
-
-                Oldman was executive producer of films like The Contender, Plunkett & Macleane (1999) and Nil by Mouth (1997), the latter of which he also wrote and directed. He featured in television shows such as Fallen Angels, Tracey Takes On... and Friends, voiced Ignitius and Viktor Reznov respectively in The Legend of Spyro and Call of Duty video games and appeared in music videos for David Bowie, Guns N' Roses and Annie Lennox.
+              {{ this.actor.biography }}
 
             </p>
             <div class="movies">
                 <h4>Conocido por:</h4>
-                <div >
+                <div :key="movie.id" v-for="movie in this.knownFor">
      
                     <img src="https://www.themoviedb.org/t/p/w150_and_h225_bestv2/8QDQExnfNFOtabLDKqfDQuHDsIg.jpg" alt="">
 
                 </div>    
-                <a href="">Batman: El caballero de <br>la noche</a>
+                <a href=""></a>
             </div>
 
        </div>
@@ -49,13 +43,15 @@
 
             return{
 
-            actor:{}
+            actor:{},
+            knownFor: [],
 
             }
 
         },
         mounted(){
 
+            const actor_id=this.$route.params.id;
             const options = {
                 method: 'GET',
                 headers: {
@@ -63,11 +59,12 @@
                 Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyYzRhNDg2ZmNmNWQ2NmIwN2Q2N2JlZmVkYzg4ODk1MSIsInN1YiI6IjY1MTQ0ZGFlYzUwYWQyMDBlYWJjNTU2MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lalrJHywt_lBksCNt0ru5r4jtLSs9GgVP4IooOUa2qQ'
                 }
             };
-            fetch('https://api.themoviedb.org/3/person/person_id?language=en-US', options)
+            fetch(`https://api.themoviedb.org/3/person/${actor_id}?language=en-US`, options)
             .then(response => response.json())
             .then(json => this.actor = json)
             .catch(err => console.error(err));
 
+    
         },
         methods: {
 

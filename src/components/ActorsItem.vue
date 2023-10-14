@@ -3,7 +3,7 @@
     <div>
 
         <div>
-            <router-link class="link" :to="'/actor/${this.actor.id}'">
+            <router-link class="link" :to="`/actor/${this.actor.id}`">
                 <img :src="profileImage" alt="">
                 <h3 class="name">{{actor.name}}</h3>
                 <p>
