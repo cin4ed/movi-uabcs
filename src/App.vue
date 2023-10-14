@@ -1,22 +1,18 @@
 <script>
-  export default{
+  import Header from './components/Header.vue';
+
+  export default { 
     name: "App",
+    components: {
+      Header,
+    },
   }
 </script>
 
 <template>
-  <header>
-
-  </header>
-
+  <Header></Header>
   <main>
     <router-view></router-view>
   </main>
 </template>
 
-<style scoped>
-  body{
-    background-color: red;
-    width: 100%;
-  }
-</style>
