@@ -20,13 +20,15 @@
 <template>
 
     <div style="width: 70%;">
-        <button v-if="!loading" v-for="(title, index) in this.title" :value="index" @click="changeIndex"> 
-            {{ this.title[index] }}
-        </button>
-        <div v-if="!loading" class="carousel" style="background-color: yellow;">
+        <div v-if="!loading && !video" class="carousel">
             <br>
             <!-- Validamos si el resultado nos devolvio más de un resultado en las peliculas -->
             <!-- Revisamos el resultado de la peticion retorno alguna pelicula -->
+            <span v-if="!video" style="background-color: white; border: rgb(0, 0, 82) 2px solid; display: flex; width: 50%; border-radius: 20px;">
+                    <button style="width: 100%; height: 40px; border: 0px;" class="carouselm-round-button" v-if="!loading" v-for="(title, index) in this.title" :value="index" @click="changeIndex"> 
+                        {{ this.title[index] }}
+                    </button>
+            </span>
             <ul v-if="!video && movieData.results.length > 0">
                 <!-- v-for crea un objeto por cada objeto en el arreglo, dandonos la -->
                 <!-- posibilidad de interactuar con el -->
@@ -36,43 +38,49 @@
                     </router-link>
                 </li>
             </ul>
-            <div v-else>
-                <!-- Container para tener todo en un sticky object -->
-                <div v-if="mostrarvideo" style="position: fixed; top: 0px; left: 0px; width: 100%; 
-                        height: 100%; z-index: 2; color: black;">
-                    <!-- Div para dar el color transparente -->
-                    <div style="width: 100%; height: 100%; background-color: black; opacity: 0.3; position: absolute;"></div>
-                    <div style="position: absolute; background-color: black; padding: 10px; width: 70%;
-                                display: flex; flex-direction: column; align-items: flex-end; top: 10%; left: 15%;
-                                border-radius: 20px;">        
-                        <p style="color: white; position: absolute; left: 20px; top: 0px;"> Aqui debe de ir un titulo </p>
-                        <button style="all: unset; background-color: gray; padding: 5px 10px; 
-                        border: 2px solid black; " @click="mostrarvideo=false">X</button>
-                        <iframe
-                            width="100%"
-                            height="615"
-                            :src=trailerurl
-                            frameborder="0"
-                            allowfullscreen
-                            style="
-                            border-radius: 10px"
-                        ></iframe>
-                    </div>
-                </div>
-                <!-- Mensaje al usuario donde no se pudieron encontrar las peliculas -->
-                <ul v-if="video" style="gap: 40px;">
-                    <!-- v-for crea un objeto por cada objeto en el arreglo, dandonos la -->
-                    <!-- posibilidad de inuar con el -->
-                    <li v-for="movie in movieData" :movieid="movie[1]">
-                        <div id="carouselm-trailer-id" @click="console.log(movie[2]), mostrarvideo=true, trailerurl='https://www.youtube.com/embed/'+movie[2]" style="height: 100%; position: relative;">
-                            <img id="carouselm-icon-id" src="../img/whiteplayicon.png" style="position: absolute; top:55px; left:120px;">
-                            <img id="carouselm-image-id" style="border-radius: 10px;" width="310" :src="'https://www.themoviedb.org/t/p/w355_and_h200_multi_faces/' + movie[0]">
-                        </div>
-                    </li>
-                </ul>
-            </div>
         </div>
-        <p v-else>Cargando</p>
+        <div v-else style="background-color: black; min-height: 279px;">
+            <div class="carousel" style="width: 100%;">
+                <span style="border: white 2px solid; display: flex; width: 50%; border-radius: 20px; margin: 10px;">
+                    <button style="width: 100%; height: 40px; border: 0px;" class="carouselm-trailer-round-button" v-if="!loading" v-for="(title, index) in this.title" :value="index" @click="changeIndex"> 
+                        {{ this.title[index] }}
+                    </button>
+                </span>
+                <!-- Container para tener todo en un sticky object -->
+                <div v-if="mostrarvideo" style="position: fixed; top: 0px; left: 0px;  
+                        height: 100%; z-index: 2; color: black; width: 100%;">
+                        <!-- Div para dar el color transparente -->
+                        <div style="width: 100%; height: 100%; background-color: black; opacity: 0.3; position: absolute;"></div>
+                        <div style="position: absolute; background-color: black; padding: 10px; width: 70%;
+                                    display: flex; flex-direction: column; align-items: flex-end; top: 10%; left: 15%;
+                                    border-radius: 20px;">        
+                            <p style="color: white; position: absolute; left: 20px; top: 0px;"> {{ trailertitle }} </p>
+                            <button style="all: unset; background-color: gray; padding: 5px 10px; 
+                            border: 2px solid black; " @click="mostrarvideo=false">X</button>
+                            <iframe
+                                width="100%"
+                                height="615"
+                                :src=trailerurl
+                                frameborder="0"
+                                allowfullscreen
+                                style="
+                                border-radius: 10px"
+                            ></iframe>
+                        </div>
+                    </div>
+                    <!-- Mensaje al usuario donde no se pudieron encontrar las peliculas -->
+                    <ul v-if="video" style="gap: 40px;">
+                        <!-- v-for crea un objeto por cada objeto en el arreglo, dandonos la -->
+                        <!-- posibilidad de inuar con el -->
+                        <li v-for="movie in movieData" :movieid="movie[1]">
+                            <div id="carouselm-trailer-id" @click="console.log(movie[2]), mostrarvideo=true, trailerurl='https://www.youtube.com/embed/'+movie[2], trailertitle=movie[3]" style="height: 100%; position: relative;">
+                                <img id="carouselm-icon-id" src="../img/whiteplayicon.png" style="position: absolute; top:55px; left:120px;">
+                                <img id="carouselm-image-id" style="border-radius: 10px;" width="310" :src="'https://www.themoviedb.org/t/p/w355_and_h200_multi_faces/' + movie[0]">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
     </div>
         
 </template>
@@ -102,7 +110,8 @@
                 index: 0,
                 trailerKey: '',
                 mostrarvideo: false,
-                trailerurl: ''
+                trailerurl: '',
+                trailertitle: ''
             };
         },
         mounted(){
@@ -153,11 +162,14 @@
                                     if (!encontrado && backdrop.vote_average >= 1.5) {
                                         /* REQUEST PARA SACAR EL LINK DE YT */
                                         let videokey = '';
+                                        let videoname = '';
                                         app.axios.get(this.getLink(resp,x,true))
                                         .then((tresp)=>{
                                             console.log(tresp);
                                             videokey = tresp.data.results[0].key;
-                                            values = [backdrop.file_path, resp.data.results[x].id, videokey];
+                                            console.log(tresp);
+                                            videoname = tresp.data.results[0].name;
+                                            values = [backdrop.file_path, resp.data.results[x].id, videokey, videoname];
                                             this.movieData.push(values);
                                             console.log(videokey);
                                         })
@@ -212,7 +224,6 @@
         transform: scale(1.1);
     }
     .carousel{
-        width: 80%;
         overflow-x: auto;
     }
     .carousel ul{
@@ -220,4 +231,43 @@
         list-style: none;
         gap: 20px;
     }
+    .carouselm-round-button:first-child, .carouselm-trailer-round-button:first-child{
+        border-radius: 17px 0px 0px 17px;
+    }
+    .carouselm-round-button:last-child, .carouselm-trailer-round-button:last-child{
+        border-radius: 0px 17px 17px 0px;
+    }
+    .carouselm-round-button, .carouselm-trailer-round-button{
+        transition: 0.3s; 
+        font-weight: bold;
+    }
+    .carouselm-trailer-round-button{
+        background-color: transparent;
+        color: white;
+    }
+    .carouselm-round-button:hover{
+        background-color: rgb(0, 5, 70);
+        color: white;
+    }
+    .carouselm-trailer-round-button:hover{
+        background-color: white;
+        color: black;
+    }
+
+    /* TRAILERS */
+    /* .carouselm-trailer-round-button{
+        background-color: transparent;
+        color: white;
+        transition: 0.3s; 
+    }
+    .carouselm-trailer-round-button:hover{
+        background-color: white;
+        color: black;
+    }
+    .carouselm-trailer-round-button:first-child{
+        border-radius: 17px 0px 0px 17px;
+    }
+    .carouselm-trailer-round-button:last-child{
+        border-radius: 0px 17px 17px 0px;
+    } */
 </style>
