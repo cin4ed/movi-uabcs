@@ -2,7 +2,7 @@
 
     <div>
 
-        <h2>Popular actors</h2>
+        <h2>Actores populares</h2>
 
         <div class="actors_item">
             <ActorsItem :key="actor.id" v-for="actor in this.actors.results" :actor="actor"/> 

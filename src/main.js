@@ -17,7 +17,7 @@ const routes = [
     { path: '/', component: Login },
     { path: '/login', component: Login },
     { path: '/index/', component: Index },
-    { path: '/actors', component: Actors},
+    { path: '/actors/', component: Actors},
     { path: '/serie/:id', component: Serie },
     {
         path: '/movie/:id',
