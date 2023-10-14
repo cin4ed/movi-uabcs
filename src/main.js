@@ -1,13 +1,13 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.js';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+// import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/js/bootstrap.js';
+// import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import App from './App.vue';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from "vue-router";
 
 // Route components
-import Home from './components/Home.vue';
+// import Home from './components/Home.vue';
 import Index from './components/MovieCatalogue.vue';
 import Login from './components/Login.vue';
 import Actors from './components/ActorsCatalogue.vue';
@@ -18,7 +18,7 @@ import SeasonDetails from "./components/SeasonDetails.vue";
 
 // Define routes
 const routes = [
-    { path: '/', component: Home, },
+    // { path: '/', component: Home, },
     { path: '/index', component: Index, },
     { path: '/login', component: Login, },
     { path: '/actors/', component: Actors},
