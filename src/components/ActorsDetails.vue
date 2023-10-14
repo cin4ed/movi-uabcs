@@ -44,7 +44,7 @@
             return{
 
             actor:{},
-            knownFor: [],
+            knownFor: {},
 
             }
 
@@ -63,6 +63,31 @@
             .then(response => response.json())
             .then(json => this.actor = json)
             .catch(err => console.error(err));
+
+            const options2 = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyYzRhNDg2ZmNmNWQ2NmIwN2Q2N2JlZmVkYzg4ODk1MSIsInN1YiI6IjY1MTQ0ZGFlYzUwYWQyMDBlYWJjNTU2MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lalrJHywt_lBksCNt0ru5r4jtLSs9GgVP4IooOUa2qQ'
+            }
+            };
+
+            fetch(`https://api.themoviedb.org/3/person/${actor_id}/combined_credits?language=en-US`, options2)
+            .then(response => response.json())
+            .then(json => this.knownFor = json)
+            .catch(err => console.error(err));
+
+
+            for(let i=0; i<this.knownFor.lenght; i++){
+
+                console.log(this.knownFor[i])
+
+            }
+            // this.knownFor.cast.forEach(movie => {
+                
+            //     console.log(movie)
+
+            // });
 
     
         },
