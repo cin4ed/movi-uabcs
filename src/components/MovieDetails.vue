@@ -37,12 +37,15 @@
       <h3>Ingresos:</h3>
       <p>{{ movie ? formatCurrency(movie.revenue) : 'Cargando...' }}</p>
     </div>
-      <h3>Palabras clave:</h3>
-      <ul class="keywords">
+    <div>
+      <!-- palabras clave -->
+      <h3 v-if="movie && movie.keywords && movie.keywords.length">Palabras clave:</h3>
+      <ul class="keywords" v-if="movie && movie.keywords && movie.keywords.length > 0">
         <li v-for="keyword in (movie ? movie.keywords : [])">
           <span class="keyword-button">{{ keyword ? keyword.name : 'Cargando...' }}</span>
         </li>
       </ul>
+    </div>
     </div>
     <!-- Actores -->
     <h2 v-if="cast.length">Actores principales:</h2>
@@ -86,8 +89,8 @@
     ></iframe>
   </div>
   <!-- Recomendaciones -->
-<h2 v-if="recommendations.length">Recomendaciones:</h2>
-<div class="recommendations" v-if="recommendations.length">
+  <h2>Recomendaciones:</h2>
+<div class="recommendations">
   <div class="recommendations-container">
     <ul class="recommendation-list">
       <li v-for="recommendation in recommendations" :key="recommendation.id">
@@ -118,6 +121,7 @@ export default {
       trailerUrl: '',
       trailerId: null,
       recommendations: [],
+      userRating: null,
     };
   },
   computed: {
@@ -137,6 +141,10 @@ export default {
       }
       return {}; 
     },
+},
+created() {
+  const movieId = this.$route.params.id;
+  this.getMovieRecommendations(movieId);
 },
   mounted() {
     const movieId = this.$route.params.id;
@@ -223,9 +231,42 @@ async getMovieRecommendations(movieId) {
     const recommendationsUrl = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${apiKey}&language=es-MX`;
 
     const response = await axios.get(recommendationsUrl);
-    this.recommendations = response.data.results;
+
+    if (response.data && response.data.results && response.data.results.length > 0) {
+      this.recommendations = response.data.results;
+    } else {
+      // No se encontraron recomendaciones para esta película.
+      this.loadMoviesWithSameMainGenre(movieId);
+    }
   } catch (error) {
     console.error('Error al obtener recomendaciones de películas:', error);
+    
+  }
+},
+async loadMoviesWithSameMainGenre(movieId) {
+  try {
+    
+    const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d'; 
+    const apiUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=es-MX`;
+
+    const response = await axios.get(apiUrl);
+    const currentMovie = response.data;
+
+    if (currentMovie.genres && currentMovie.genres.length > 0) {
+      // Obtener el ID del género principal 
+      const mainGenreId = currentMovie.genres[0].id;
+
+      // Consultar películas con el mismo género principal.
+      const similarMoviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-MX&with_genres=${mainGenreId}`;
+
+      const similarMoviesResponse = await axios.get(similarMoviesUrl);
+      if (similarMoviesResponse.data && similarMoviesResponse.data.results) {
+        this.recommendations = similarMoviesResponse.data.results;
+      }
+    }
+  } catch (error) {
+    console.error('Error al cargar películas con el mismo género principal:', error);
+    
   }
 },
 // Solicitud para obtener reviews
