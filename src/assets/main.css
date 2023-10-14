@@ -5,15 +5,3 @@ body{
     padding: 0;
     margin: 0;
 }
-
-/* CSS para crear un carousel */
-.carousel{
-    width: 50%;
-    overflow-x: auto;
-}
-
-.carousel ul{
-    display: flex;
-    list-style: none;
-    gap: 20px;
-}
