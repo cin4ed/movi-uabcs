@@ -110,7 +110,7 @@
         },
         methods:{
             getLink(resp, x, video){
-                let addOn = (video == true ? 'videos?language=es-MX&' : 'images?');
+                let addOn = (video == true ? 'videos?' : 'images?');
                 if(resp.data.results[x].media_type == 'movie' || this.index == 2){
                     return `https://api.themoviedb.org/3/movie/${resp.data.results[x].id}/`+ addOn +`api_key=6a71a113dddd8d476e8b8e07db83bb9d`;
                 }else if(resp.data.results[x].media_type == 'tv' || this.index == 3){

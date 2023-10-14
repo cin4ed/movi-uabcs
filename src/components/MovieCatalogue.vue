@@ -24,8 +24,8 @@
 
                 trailerLinks: ['https://api.themoviedb.org/3/trending/all/week?api_key=6a71a113dddd8d476e8b8e07db83bb9d',
                                 'https://api.themoviedb.org/3/trending/tv/week?api_key=6a71a113dddd8d476e8b8e07db83bb9d',
-                                'https://api.themoviedb.org/3/movie/now_playing?language=es-MX&page=1&api_key=6a71a113dddd8d476e8b8e07db83bb9d',
-                                'https://api.themoviedb.org/3/tv/on_the_air?language=es-MX&page=1&api_key=6a71a113dddd8d476e8b8e07db83bb9d'],
+                                'https://api.themoviedb.org/3/movie/now_playing?page=1&api_key=6a71a113dddd8d476e8b8e07db83bb9d',
+                                'https://api.themoviedb.org/3/tv/airing_today?page=1&api_key=6a71a113dddd8d476e8b8e07db83bb9d'],
                 trailerHeaders: ['Popular','En TV','En cines', 'Streaming'],
             };
         },
