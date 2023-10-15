@@ -29,18 +29,27 @@
                         {{ this.title[index] }}
                     </button>
             </span>
-            <ul v-if="!video && movieData.results.length > 0">
+            <ul v-if="!video && movieData.results.length > 0" style="height: 300px;">
                 <!-- v-for crea un objeto por cada objeto en el arreglo, dandonos la -->
                 <!-- posibilidad de interactuar con el -->
-                <li v-for="movie in movieData.results" :key="movie.id">
+                <li v-for="movie in movieData.results" :key="movie.id" style="position: relative;" v-on:mouseleave="movie[5]=false">
                     <router-link :to="'/movie/' + movie.id">
                         <img v-if="!video" :src="'https://image.tmdb.org/t/p/w185' + movie.poster_path">
                     </router-link>
+                    <p class="carourelm-flexible-list" style="top: 20px; font-weight: bold; padding: 3px 6px; border-radius: 20px;
+                    width: 10px; user-select: none; position: relative; left: 160px; top: -290px; text-align: center; display: flex; justify-content: center;
+                    align-content: center;" @click="movie[5]=true">•••</p>
+                    <div v-if="movie[5]" style="width: 80px; background-color: white; padding: 5px 3px; display: flex; flex-direction: column; gap: 5px;
+                        user-select: none; border-radius: 5px; border: 2px lightgray solid; position: relative; left: 80px; top: -320px;">
+                        <div class="carouselm-select-action" style="padding: 5px 2px;">Favorite</div>
+                        <div class="carouselm-select-action" style="padding: 5px 2px;">Watchlist</div>
+                        <div class="carouselm-select-action" style="padding: 5px 2px;">Rating</div>
+                    </div>
                 </li>
             </ul>
         </div>
-        <div v-else style="background-color: black; min-height: 279px;">
-            <div class="carousel" style="width: 100%;">
+        <div v-else style="background-color: black; min-height: 300px; overflow: auto; scrollbar-width: 0;">
+            <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
                 <span style="border: white 2px solid; display: flex; width: 50%; border-radius: 20px; margin: 10px;">
                     <button style="width: 100%; height: 40px; border: 0px;" class="carouselm-trailer-round-button" v-if="!loading" v-for="(title, index) in this.title" :value="index" @click="changeIndex"> 
                         {{ this.title[index] }}
@@ -48,39 +57,49 @@
                 </span>
                 <!-- Container para tener todo en un sticky object -->
                 <div v-if="mostrarvideo" style="position: fixed; top: 0px; left: 0px;  
-                        height: 100%; z-index: 2; color: black; width: 100%;">
-                        <!-- Div para dar el color transparente -->
-                        <div style="width: 100%; height: 100%; background-color: black; opacity: 0.3; position: absolute;"></div>
-                        <div style="position: absolute; background-color: black; padding: 10px; width: 70%;
-                                    display: flex; flex-direction: column; align-items: flex-end; top: 10%; left: 15%;
-                                    border-radius: 20px;">        
-                            <p style="color: white; position: absolute; left: 20px; top: 0px;"> {{ trailertitle }} </p>
-                            <button style="all: unset; background-color: gray; padding: 5px 10px; 
-                            border: 2px solid black; " @click="mostrarvideo=false">X</button>
-                            <iframe
-                                width="100%"
-                                height="615"
-                                :src=trailerurl
-                                frameborder="0"
-                                allowfullscreen
-                                style="
-                                border-radius: 10px"
-                            ></iframe>
-                        </div>
+                    height: 100%; z-index: 2; color: black; width: 100%;">
+                    <!-- Div para dar el color transparente -->
+                    <div style="width: 100%; height: 100%; background-color: black; opacity: 0.3; position: absolute;"></div>
+                    <div style="position: absolute; background-color: black; padding: 10px; width: 70%;
+                                display: flex; flex-direction: column; align-items: flex-end; top: 10%; left: 15%;
+                                border-radius: 20px;">        
+                        <p style="color: white; position: absolute; left: 20px; top: 0px;"> {{ trailertitle }} </p>
+                        <button style="all: unset; background-color: gray; padding: 5px 10px; 
+                        border: 2px solid black; " @click="mostrarvideo=false">X</button>
+                        <iframe
+                            width="100%"
+                            height="615"
+                            :src=trailerurl
+                            frameborder="0"
+                            allowfullscreen
+                            style="
+                            border-radius: 10px"
+                        ></iframe>
                     </div>
-                    <!-- Mensaje al usuario donde no se pudieron encontrar las peliculas -->
-                    <ul v-if="video" style="gap: 40px;">
-                        <!-- v-for crea un objeto por cada objeto en el arreglo, dandonos la -->
-                        <!-- posibilidad de inuar con el -->
-                        <li v-for="movie in movieData" :movieid="movie[1]">
-                            <div id="carouselm-trailer-id" @click="console.log(movie[2]), mostrarvideo=true, trailerurl='https://www.youtube.com/embed/'+movie[2], trailertitle=movie[3]" style="height: 100%; position: relative;">
-                                <img id="carouselm-icon-id" src="../img/whiteplayicon.png" style="position: absolute; top:55px; left:120px;">
-                                <img id="carouselm-image-id" style="border-radius: 10px;" width="310" :src="'https://www.themoviedb.org/t/p/w355_and_h200_multi_faces/' + movie[0]">
-                            </div>
-                        </li>
-                    </ul>
                 </div>
+                <!-- Mensaje al usuario donde no se pudieron encontrar las peliculas -->
+                <ul v-if="video" style="gap: 40px; display: flex; height: 200px;">
+                    <!-- v-for crea un objeto por cada objeto en el arreglo, dandonos la -->
+                    <!-- posibilidad de inuar con el -->
+                    <li v-for="movie in movieData" :movieid="movie[1]" v-on:mouseleave="movie[5]=false">
+                        <div id="carouselm-trailer-id" @click="console.log(movie[2]), mostrarvideo=true, trailerurl='https://www.youtube.com/embed/'+movie[2], trailertitle=movie[3]" 
+                        style="position: relative; padding: 10px;">
+                            <img id="carouselm-icon-id" src="../img/whiteplayicon.png" style="position: absolute; top:55px; left:120px;">
+                            <img id="carouselm-image-id" style="border-radius: 10px;" width="310" :src="'https://www.themoviedb.org/t/p/w355_and_h200_multi_faces/' + movie[0]">
+                        </div>
+                        <p class="carourelm-flexible-list" style="top: 20px; font-weight: bold; padding: 3px 6px; border-radius: 20px;
+                        width: 10px; user-select: none; position: relative; left: 290px; top: -200px; text-align: center; display: flex; justify-content: center;
+                        align-content: center;" @click="movie[5]=true">•••</p>
+                        <div v-if="movie[5]" style="width: 80px; background-color: white; padding: 5px 3px; display: flex; flex-direction: column; gap: 5px;
+                            user-select: none; border-radius: 5px; border: 2px lightgray solid; position: relative; left: 210px; top: -230px;">
+                            <div class="carouselm-select-action" style="padding: 5px 2px;">Favorite</div>
+                            <div class="carouselm-select-action" style="padding: 5px 2px;">Watchlist</div>
+                            <div class="carouselm-select-action" style="padding: 5px 2px;">Rating</div>
+                        </div>
+                    </li>
+                </ul>
             </div>
+        </div>
     </div>
         
 </template>
@@ -111,10 +130,12 @@
                 trailerKey: '',
                 mostrarvideo: false,
                 trailerurl: '',
-                trailertitle: ''
+                trailertitle: '',
             };
         },
         mounted(){
+            console.log(localStorage.getItem('username'));
+            console.log(localStorage.getItem('sessionKey'));
             this.rechargeCarousel();
         },
         methods:{
@@ -215,6 +236,7 @@
     }
 </script>
 
+<!-- agregar al terminar con el css scoped -->
 <style>
     #carouselm-trailer-id{
         transition: 0.3s;
@@ -253,21 +275,27 @@
         background-color: white;
         color: black;
     }
-
-    /* TRAILERS */
-    /* .carouselm-trailer-round-button{
-        background-color: transparent;
-        color: white;
-        transition: 0.3s; 
-    }
-    .carouselm-trailer-round-button:hover{
+    .carourelm-flexible-list{
         background-color: white;
-        color: black;
+        color: gray;
+        transition: 0.3s;
     }
-    .carouselm-trailer-round-button:first-child{
-        border-radius: 17px 0px 0px 17px;
+    .carourelm-flexible-list:hover{
+        background-color: black;
+        color: white;
     }
-    .carouselm-trailer-round-button:last-child{
-        border-radius: 0px 17px 17px 0px;
-    } */
+    .carouselm-select-action{
+        transition: 0.3s;
+        font-weight: bold;
+    }
+    .carouselm-select-action:first-child{
+        border-bottom: 2px lightgray solid;
+    }
+    .carouselm-select-action:last-child{
+        border-top: 2px lightgray solid;
+    }
+    .carouselm-select-action:hover{
+        background-color: rgb(6, 6, 180);
+        color: white;
+    }
 </style>

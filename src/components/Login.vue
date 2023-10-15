@@ -35,6 +35,7 @@
                 requestoken: null,
                 Login: false,
                 SessionKey: '',
+                SessionID: '',
                 AppTitle: '',
                 constants: {},
                 dataLoaded: false,
@@ -90,11 +91,22 @@
                             'request_token': this.requestoken
                         }, this.$APIHeaders)
                         .then((resp) => {
+                            
                             this.SessionKey = resp.data;
                             console.log(this.SessionKey.session_id);
+                            console.log(resp)
                             localStorage.setItem('username', this.username);
                             localStorage.setItem('sessionKey', this.SessionKey.session_id);
-                            this.$router.push('/index/');
+
+                            app.axios.get(`https://api.themoviedb.org/3/account?api_key=6a71a113dddd8d476e8b8e07db83bb9d&session_id=${this.SessionKey.session_id}`,this.$APIHeaders)
+                            .then((resp) => {
+                                localStorage.setItem('sessionID', resp.data.id);
+                                console.log(localStorage.getItem('sessionID'));
+                                this.$router.push('/index/');
+                            })
+                            .catch((error) => {
+                                console.error('Error al verificar la sesión:', error);
+                            });
                         })
                         .catch((error) => {
                             console.error('Error al verificar la sesión:', error);
@@ -121,7 +133,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .login-container, .menu-options{
         background-color: white;
         display: flex;
