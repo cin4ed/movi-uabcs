@@ -1,7 +1,6 @@
 
 <template>
     <div class="movie-details" :style="backgroundImageStyle">
-      
       <div v-if="movie" class="movie-poster">
         <img :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path" :alt="movie.title" class="rounded-poster" />
       </div>
@@ -27,13 +26,10 @@
       <div class="general-info">
       <h3>Estado de la película:</h3>
       <p>{{ movie ? movie.status : 'Cargando...' }}</p>
-
       <h3>Idioma original:</h3>
       <p>{{ movie ? movie.original_language : 'Cargando...' }}</p>
-
       <h3>Presupuesto:</h3>
       <p>{{ movie ? formatCurrency(movie.budget) : 'Cargando...' }}</p>
-
       <h3>Ingresos:</h3>
       <p>{{ movie ? formatCurrency(movie.revenue) : 'Cargando...' }}</p>
     </div>
@@ -53,7 +49,9 @@
       <ul class="actor-list">
         <li v-for="actor in cast" :key="actor.id">
           <div v-if="actor.profile_path" class="actor">
+            <a :href="'/actor/'+actor.id">
             <img :src="'https://image.tmdb.org/t/p/w185' + actor.profile_path" :alt="actor.name" />
+          </a>
             <p class="actor-name">{{ actor.name }}</p>
             <p class="character-name">{{ actor.character }}</p>
           </div>
@@ -76,8 +74,6 @@
       </button>
     </div>
   <!-- Trailer -->
-  
-  
   <div class="video-container" v-if="trailerId">
     <h2 class="video-title" >Trailer:</h2>
     <iframe
@@ -106,7 +102,6 @@
 </div>
 </template>
   
-  
   <script>
 import axios from 'axios';
 
@@ -128,6 +123,7 @@ export default {
   embedUrl() {
     return `https://www.youtube.com/embed/${this.trailerId}`;
   },
+  //La imagen de atras dee la peli
   backgroundImageStyle() {
       if (this.movie && this.movie.backdrop_path) {
         const backgroundImageUrl = `https://image.tmdb.org/t/p/original${this.movie.backdrop_path}`;
@@ -470,11 +466,6 @@ ul {
   margin-bottom: 30px; 
   font-size: 1.5em;
   color: rgb(0, 0, 0); 
-}
-
-.recommendations {
-  margin-top: 20px;
-  overflow-x: auto;
 }
 
 .recommendations-container {

@@ -1,9 +1,13 @@
-import './assets/main.css';
+// import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/js/bootstrap.js';
+// import 'bootstrap-icons/font/bootstrap-icons.css';
+
 import App from './App.vue';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from "vue-router";
 
 // Route components
+// import Home from './components/Home.vue';
 import Index from './components/MovieCatalogue.vue';
 import Login from './components/Login.vue';
 import Actors from './components/ActorsCatalogue.vue';
@@ -14,25 +18,14 @@ import SeasonDetails from "./components/SeasonDetails.vue";
 
 // Define routes
 const routes = [
-    { path: '/', component: Login },
-    { path: '/login', component: Login },
-    { path: '/index/', component: Index },
+    // { path: '/', component: Home, },
+    { path: '/index', component: Index, },
+    { path: '/login', component: Login, },
     { path: '/actors/', component: Actors},
     { path: '/serie/:id', component: Serie },
-    {
-        path: '/movie/:id',
-        name: 'MovieDetails',
-        component: MovieDetails,
-
-	},
-    {
-
-        path: "/actor/:id",
-        name: "actorsDetails",
-        component: ActorsDetails,
-
-      },
     { path: '/SeasonDetails', component: SeasonDetails },
+    { path: '/movie/:id', component: MovieDetails },
+    { path: "/actor/:id", component: ActorsDetails },
 ];
 
 // Create router instance and pass the routes

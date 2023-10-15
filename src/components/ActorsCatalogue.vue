@@ -53,7 +53,7 @@ export default{
 
 }
 </script>
-<style>
+    <style>
     .actors_item{
 
         list-style: none;
