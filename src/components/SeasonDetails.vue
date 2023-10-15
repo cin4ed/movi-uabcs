@@ -12,19 +12,25 @@
       return{
         title:'blabla',
         loading:true,
-        overview :'chimba'
+        overviewer :'chimba',
+        numSeason:'',
+        numCap:'',
+        airDate:'',
 
       };
 
     },
     mounted(){
-      app.axios.get('https://api.themoviedb.org/3/tv/91363?api_key=6a71a113dddd8d476e8b8e07db83bb9d')
+      app.axios.get('https://api.themoviedb.org/3/tv/91363?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=es-MX')
                 .then((resp)=>{
                     //en caso de exito 
-                    console.log(resp.data.name)
+                    console.log(resp)
                     this.title=resp.data.name
                     this.loading=false
-                    this.overview=resp.data.overview
+                    this.overviewer=resp.data.overview
+                    this.numSeason=resp.data.number_of_seasons
+                    this.airDate=resp.data.first_air_date
+                    this.numCap=resp.data.number_of_episodes
 
                 })
                 .catch((error) => {
@@ -42,7 +48,11 @@
   <div v-if="!loading">
     Seasons
     <h1>{{ title }}</h1>
-    <h2>{{ overview }}</h2>
+    <p>{{ airDate }}</p>
+    <h3>{{ numSeason }}  {{ numCap }} Episodios</h3>
+    <h2>{{ overviewer }}</h2>
+    
+    
   </div>
   <p v-else>Cargando...</p>
 </template>
