@@ -30,6 +30,8 @@
                     </button>
             </span>
             <ul v-if="!video && movieData.results.length > 0" style="height: 300px;">
+                
+                <p>{{ mensajeDeTransaccion }}</p>
                 <!-- v-for crea un objeto por cada objeto en el arreglo, dandonos la -->
                 <!-- posibilidad de interactuar con el -->
                 <li v-for="movie in movieData.results" :key="movie.id" style="position: relative;" v-on:mouseleave="movie[5]=false">
@@ -41,20 +43,16 @@
                     align-content: center;" @click="movie[5]=true">•••</p>
                     <div v-if="movie[5]" style="width: 80px; background-color: white; padding: 5px 3px; display: flex; flex-direction: column; gap: 5px;
                         user-select: none; border-radius: 5px; border: 2px lightgray solid; position: relative; left: 80px; top: -320px;">
-                        <div class="carouselm-select-action" style="padding: 5px 2px;">Favorite</div>
-                        <div class="carouselm-select-action" style="padding: 5px 2px;">Watchlist</div>
-                        <div class="carouselm-select-action" style="padding: 5px 2px;">Rating</div>
+                        <div class="carouselm-select-action" style="padding: 5px 2px;" @click="console.log(movie.id); movie[5]=false; addToList((movie.media_type == 'movie' ? true : false), movie.id, true);    ">Favorite</div>
+                        <div class="carouselm-select-action" style="padding: 5px 2px;" @click="console.log(movie.id); movie[5]=false; addToList((movie.media_type == 'movie' ? true : false), movie.id, false);    ">Watchlist</div>
+                        <div class="carouselm-select-action" style="padding: 5px 2px;" @click="console.log(movie.id); movie[5]=false;">Rating</div>
                     </div>
                 </li>
             </ul>
         </div>
-        <div v-else style="background-color: black; min-height: 300px; overflow: auto; scrollbar-width: 0;">
-            <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
-                <span style="border: white 2px solid; display: flex; width: 50%; border-radius: 20px; margin: 10px;">
-                    <button style="width: 100%; height: 40px; border: 0px;" class="carouselm-trailer-round-button" v-if="!loading" v-for="(title, index) in this.title" :value="index" @click="changeIndex"> 
-                        {{ this.title[index] }}
-                    </button>
-                </span>
+        <div v-else style="max-height: 300px; scrollbar-width: 0;">
+            <div style="width: 100%; height: 100%; display: flex; flex-direction: column; overflow: auto; background-color: rgba(4, 0, 105, 0.3);">
+                <span style="display: flex; width: 50%; border-radius: 20px; margin: 10px; height: 48px;"></span>
                 <!-- Container para tener todo en un sticky object -->
                 <div v-if="mostrarvideo" style="position: fixed; top: 0px; left: 0px;  
                     height: 100%; z-index: 2; color: black; width: 100%;">
@@ -78,12 +76,12 @@
                     </div>
                 </div>
                 <!-- Mensaje al usuario donde no se pudieron encontrar las peliculas -->
-                <ul v-if="video" style="gap: 40px; display: flex; height: 200px;">
+                <ul v-if="video" style="list-style:none; gap: 40px; display: flex; height: 200px;">
                     <!-- v-for crea un objeto por cada objeto en el arreglo, dandonos la -->
                     <!-- posibilidad de inuar con el -->
                     <li v-for="movie in movieData" :movieid="movie[1]" v-on:mouseleave="movie[5]=false">
                         <div id="carouselm-trailer-id" @click="console.log(movie[2]), mostrarvideo=true, trailerurl='https://www.youtube.com/embed/'+movie[2], trailertitle=movie[3]" 
-                        style="position: relative; padding: 10px;">
+                        style="position: relative; padding: 10px;" v-on:mouseenter="url='https://www.themoviedb.org/t/p/w355_and_h200_multi_faces/' + movie[0]">
                             <img id="carouselm-icon-id" src="../img/whiteplayicon.png" style="position: absolute; top:55px; left:120px;">
                             <img id="carouselm-image-id" style="border-radius: 10px;" width="310" :src="'https://www.themoviedb.org/t/p/w355_and_h200_multi_faces/' + movie[0]">
                         </div>
@@ -99,6 +97,15 @@
                     </li>
                 </ul>
             </div>
+            <div style="width: 100%; height: 300px; position: relative; overflow: hidden; top: -315px; filter: blur(6px); z-index: -1;">
+                <img :src="url" style="position: absolute; width: 100%; transition: 0.3s;">
+            </div>
+            <span style="border: white 2px solid; display: flex; width: 50%; border-radius: 20px; margin: 10px; position: relative;
+            top: -600px; z-index: 3;">
+                <button style="width: 100%; height: 40px; border: 0px;" class="carouselm-trailer-round-button" v-if="!loading" v-for="(title, index) in this.title" :value="index" @click="changeIndex"> 
+                    {{ this.title[index] }}
+                </button>
+            </span>
         </div>
     </div>
         
@@ -131,14 +138,94 @@
                 mostrarvideo: false,
                 trailerurl: '',
                 trailertitle: '',
+                mensajeDeTransaccion: '',
+                estadoDeTransaccion: false,
+                url: 'https://i0.wp.com/applauss.com/wp-content/uploads/2018/09/mejores-episodios-hora-de-aventura.jpg?fit=1200%2C800&ssl=1'
             };
         },
         mounted(){
             console.log(localStorage.getItem('username'));
+            /* session key api id */
             console.log(localStorage.getItem('sessionKey'));
+
+            /* session id */
+            console.log(localStorage.getItem('sessionID'));
             this.rechargeCarousel();
         },
         methods:{
+            addToList(mediaType, thingID, favoriteOrWatchlist){
+                let flag = true;
+                let mediaTypeString = '';
+                if(mediaType)
+                    mediaTypeString = 'movie';
+                else
+                    mediaTypeString = 'tv';
+
+                if (favoriteOrWatchlist) {
+                    console.log("Va para favoritos");
+
+                    app.axios.get(`https://api.themoviedb.org/3/account/${localStorage.getItem("sessionID")}/favorite/movies?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=en-US&page=1&session_id=3bcc96bf09e7543e8b4e15d1068bbc08bdd5beee`)
+                    .then((resp) => {
+                        console.log("for");
+                        for (let x in resp.data.results) {
+                            console.log(resp.data.results[x].id);
+                            if(resp.data.results[x].id == thingID)
+                                flag = false;
+                        }
+                        if(flag)
+                            this.mensajeDeTransaccion = 'Se ha removido de tu lista de favoritos.';
+                        else
+                            this.mensajeDeTransaccion = 'Se ha agregado a tu lista de favoritos.';
+                        app.axios.post(`https://api.themoviedb.org/3/account/${localStorage.getItem("sessionID")}/favorite?session_id=${localStorage.getItem("sessionKey")}&api_key=6a71a113dddd8d476e8b8e07db83bb9d`,
+                        {
+                            "media_type": mediaTypeString,
+                            "media_id": thingID,
+                            "favorite": flag
+                        })
+                        .then((resp) => {
+                            console.log("exito")
+                        })
+                        .catch((error) => {
+                            console.error('Error al verificar la sesión:', error);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Error al verificar la lista:', error);
+                    });
+                }else{
+                    console.log("Va para watchlist");
+
+                    app.axios.get(`https://api.themoviedb.org/3/account/${localStorage.getItem("sessionID")}/watchlist/movies?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=en-US&page=1&session_id=3bcc96bf09e7543e8b4e15d1068bbc08bdd5beee`)
+                    .then((resp) => {
+                        console.log("for");
+                        for (let x in resp.data.results) {
+                            console.log(resp.data.results[x].id);
+                            if(resp.data.results[x].id == thingID)
+                                flag = false;
+                        }
+                        if(flag)
+                            this.mensajeDeTransaccion = 'Se ha removido de tu lista de Watchlist.';
+                        else
+                            this.mensajeDeTransaccion = 'Se ha agregado a tu lista de Watchlist.';
+                        app.axios.post(`https://api.themoviedb.org/3/account/${localStorage.getItem("sessionID")}/watchlist?session_id=${localStorage.getItem("sessionKey")}&api_key=6a71a113dddd8d476e8b8e07db83bb9d`,
+                        {
+                            "media_type": mediaTypeString,
+                            "media_id": thingID,
+                            "watchlist": flag
+                        })
+                        .then((resp) => {
+                            console.log("exito")
+                        })
+                        .catch((error) => {
+                            console.error('Error al verificar la sesión:', error);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Error al verificar la lista:', error);
+                    });
+                }
+                
+            },
             getLink(resp, x, video){
                 let addOn = (video == true ? 'videos?' : 'images?');
                 if(resp.data.results[x].media_type == 'movie' || this.index == 2){
@@ -186,13 +273,10 @@
                                         let videoname = '';
                                         app.axios.get(this.getLink(resp,x,true))
                                         .then((tresp)=>{
-                                            console.log(tresp);
                                             videokey = tresp.data.results[0].key;
-                                            console.log(tresp);
                                             videoname = tresp.data.results[0].name;
                                             values = [backdrop.file_path, resp.data.results[x].id, videokey, videoname];
                                             this.movieData.push(values);
-                                            console.log(videokey);
                                         })
                                         .catch((error) => {
                                             this.error = "No se pudo encontrar un video para este id.";
