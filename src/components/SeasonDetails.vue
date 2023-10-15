@@ -16,6 +16,7 @@
         numSeason:'',
         numCap:'',
         airDate:'',
+        voteAverage:'',
         serieUrl:[],
 
       };
@@ -23,7 +24,7 @@
     },
     mounted(){
       
-      app.axios.get('https://api.themoviedb.org/3/tv/91363?api_key=6a71a113dddd8d476e8b8e07db83bb9d')
+      app.axios.get('https://api.themoviedb.org/3/tv/91363?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=es-MX')
       .then((resp)=>{
           //en caso de exito 
           console.log(resp)
@@ -31,8 +32,9 @@
           this.loading=false
           this.overviewer=resp.data.overview
           this.numSeason=resp.data.number_of_seasons
-          this.airDate=resp.data.first_air_date
+          this.airDate=resp.data.seasons[0].air_date
           this.numCap=resp.data.number_of_episodes
+          this.voteAverage=resp.data.seasons[0].vote_average
 
       })
       .catch((error) => {
@@ -63,6 +65,7 @@
     <h1>{{ title }}</h1>
     <img :src="'https://www.themoviedb.org/t/p/w130_and_h195_bestv2/'+serieUrl">
     <p>{{ airDate }}</p>
+    <h3>☆{{ voteAverage }}</h3>
     <h3>Temporada•{{ numSeason }}  {{ numCap }}•Episodios</h3>
     <h2>{{ overviewer }}</h2>
     
