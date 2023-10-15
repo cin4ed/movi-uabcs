@@ -18,9 +18,32 @@
         <li v-for="genre in (movie.genres ? movie.genres : [])" :key="genre.id">
           {{ genre.name }}
         </li>
-      </ul> 
-      </div>
+      </ul>
+      <!-- favorito -->
+      <div class="movie-favorite">
+      <button @click="toggleFavorite">
+        {{ isFavorite ? 'Quitar de favoritos' : 'Marcar como favorito' }}
+      </button>
     </div>
+    <!-- calificar -->
+    <div>
+    <label for="rating">Seleccione calificación:</label>
+    <select id="rating" v-model="userRating">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <button @click="calificarPelicula">Calificar</button>
+  </div>
+    <div v-if="mostrarCalificaciones">
+    <div class="user-ratings">
+    <p>Calificación seleccionada por el usuario: {{ userRating || 'No seleccionada' }}</p>
+    </div>
+    </div>
+    </div>
+  </div>
     <!-- información adicional -->
     <div class="additional-info">
       <div class="general-info">
@@ -74,8 +97,9 @@
       </button>
     </div>
   <!-- Trailer -->
-  <div class="video-container" v-if="trailerId">
-    <h2 class="video-title" >Trailer:</h2>
+  <div class="video-container" v-if="trailerId || posterImage">
+  <h2 class="video-title">{{ trailerId ? 'Tráiler:' : 'Información:' }}</h2>
+  <div v-if="trailerId">
     <iframe
       width="560"
       height="315"
@@ -84,6 +108,11 @@
       allowfullscreen
     ></iframe>
   </div>
+  <div v-else>
+    <img :src="posterImage" alt="Póster de la película" />
+    <p>{{ trailerUnavailableMessage }}</p>
+  </div>
+</div>
   <!-- Recomendaciones -->
   <h2>Recomendaciones:</h2>
 <div class="recommendations">
@@ -117,6 +146,8 @@ export default {
       trailerId: null,
       recommendations: [],
       userRating: null,
+      isFavorite: false,
+      mostrarCalificaciones: false,
     };
   },
   computed: {
@@ -152,6 +183,66 @@ created() {
     this.getMovieRecommendations(movieId);
   },
   methods: {
+    //soli8citud rating
+    async calificarPelicula() {
+      const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d';
+      const movieId = this.$route.params.id;
+      const session_id = localStorage.getItem('sessionKey');
+      this.mostrarCalificaciones = true;
+
+      if (this.userRating !== null) {
+        // Realizar una solicitud al servidor para enviar la calificación
+        try {
+          await axios.post(
+            `https://api.themoviedb.org/3/movie/${movieId}/rating?api_key=${apiKey}&session_id=${session_id}`,
+            {
+              value: this.userRating,
+              
+            }
+          );
+        } catch (error) {
+          console.error('Error al calificar la película:', error);
+        }
+      }
+    },
+    //solicitud favorito
+  async toggleFavorite() {
+    const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d'; 
+    const movieId = this.$route.params.id;
+    const session_id = localStorage.getItem('sessionKey');
+    const account_id = localStorage.getItem('sessionID');
+
+    if (this.isFavorite) {
+      // Si ya es favorita, desmárcala
+      try {
+        await axios.post(`https://api.themoviedb.org/3/account/${account_id}/favorite?api_key=${apiKey}&session_id=${session_id}`, {
+          media_type: 'movie',
+          media_id: movieId,
+          favorite: false,
+        });
+        this.isFavorite = false;
+        
+      } catch (error) {
+        console.error('Error al desmarcar la película como favorita:', error);
+      }
+    } else {
+      // Si no es favorita, márcala
+      try {
+        await axios.post(`https://api.themoviedb.org/3/account/${account_id}/favorite?api_key=${apiKey}&session_id=${session_id}`, {
+          media_type: 'movie',
+          media_id: movieId,
+          favorite: true,
+        });
+        this.isFavorite = true;
+        
+      } catch (error) {
+        console.error('Error al marcar la película como favorita:', error);
+      }
+    }
+  },
+
+
+
     // Solicitud para obtener detalles
     async getMovieDetails(movieId) {
       try {
@@ -206,19 +297,29 @@ created() {
       try {
         const apiKey = '6a71a113dddd8d476e8b8e07db83bb9d';
         const videosUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=es-MX`;
-      const response = await axios.get(videosUrl);
+        const response = await axios.get(videosUrl);
+        const videos = response.data.results;
+        const spanishTrailer = videos.find(video => video.iso_639_1 === 'es');
 
-      const videos = response.data.results;
-      const trailer = videos.find(
-        (video) => video.type === 'Trailer' || video.type === 'Teaser'
-      );
-
-      if (trailer) {
-        this.trailerId = trailer.key;
-      }
-    } catch (error) {
-      console.error('Error al obtener el tráiler de la película:', error);
-    }
+// Si se encuentra un tráiler en español
+if (spanishTrailer) {
+  this.trailerId = spanishTrailer.key;
+} else {
+  // Si no se encuentra un tráiler en español, busca uno en inglés
+  const englishTrailer = videos.find(video => video.iso_639_1 === 'en');
+  
+  if (englishTrailer) {
+    this.trailerId = englishTrailer.key;
+  } else {
+    // Si no hay tráiler en ningún idioma img de ñl poster y "trailer no disponible"
+    this.trailerId = null;
+    this.posterImage = `https://image.tmdb.org/t/p/w200${this.movie.poster_path}`;
+    this.trailerUnavailableMessage = 'Tráiler no disponible';
+  }
+}
+} catch (error) {
+console.error('Error al obtener el tráiler de la película:', error);
+}
 },
 // Solicitud para obtener recomendaciones
 async getMovieRecommendations(movieId) {
@@ -231,7 +332,7 @@ async getMovieRecommendations(movieId) {
     if (response.data && response.data.results && response.data.results.length > 0) {
       this.recommendations = response.data.results;
     } else {
-      // No se encontraron recomendaciones para esta película.
+      // No hay recomendaciones para esta película, cargar unas peliculas con el mismo genero principal.
       this.loadMoviesWithSameMainGenre(movieId);
     }
   } catch (error) {
@@ -252,7 +353,7 @@ async loadMoviesWithSameMainGenre(movieId) {
       // Obtener el ID del género principal 
       const mainGenreId = currentMovie.genres[0].id;
 
-      // Consultar películas con el mismo género principal.
+      // buscar pelis con el mismo género principal.
       const similarMoviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-MX&with_genres=${mainGenreId}`;
 
       const similarMoviesResponse = await axios.get(similarMoviesUrl);
