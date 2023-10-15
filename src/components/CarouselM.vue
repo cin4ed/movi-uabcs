@@ -164,7 +164,7 @@
                 if (favoriteOrWatchlist) {
                     console.log("Va para favoritos");
 
-                    app.axios.get(`https://api.themoviedb.org/3/account/${localStorage.getItem("sessionID")}/favorite/movies?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=en-US&page=1&session_id=3bcc96bf09e7543e8b4e15d1068bbc08bdd5beee`)
+                    app.axios.get(`https://api.themoviedb.org/3/account/${localStorage.getItem("sessionID")}/favorite/movies?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=en-US&page=1&session_id=${localStorage.getItem('sessionKey')}`)
                     .then((resp) => {
                         console.log("for");
                         for (let x in resp.data.results) {
@@ -195,7 +195,7 @@
                 }else{
                     console.log("Va para watchlist");
 
-                    app.axios.get(`https://api.themoviedb.org/3/account/${localStorage.getItem("sessionID")}/watchlist/movies?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=en-US&page=1&session_id=3bcc96bf09e7543e8b4e15d1068bbc08bdd5beee`)
+                    app.axios.get(`https://api.themoviedb.org/3/account/${localStorage.getItem("sessionID")}/watchlist/movies?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=en-US&page=1&session_id=${localStorage.getItem('sessionKey')}`)
                     .then((resp) => {
                         console.log("for");
                         for (let x in resp.data.results) {
