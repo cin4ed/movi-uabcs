@@ -1,13 +1,13 @@
-// import 'bootstrap/dist/css/bootstrap.css';
-// import 'bootstrap/dist/js/bootstrap.js';
-// import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import App from './App.vue';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from "vue-router";
 
 // Route components
-// import Home from './components/Home.vue';
+import Home from './components/Home.vue';
 import Index from './components/MovieCatalogue.vue';
 import Login from './components/Login.vue';
 import Actors from './components/ActorsCatalogue.vue';
@@ -18,7 +18,7 @@ import SeasonDetails from "./components/SeasonDetails.vue";
 
 // Define routes
 const routes = [
-    // { path: '/', component: Home, },
+    { path: '/', component: Home, },
     { path: '/index', component: Index, },
     { path: '/login', component: Login, },
     { path: '/actors/', component: Actors},
@@ -40,13 +40,13 @@ const app = createApp(App);
 app.config.globalProperties.API_KEY = '6a71a113dddd8d476e8b8e07db83bb9d';
 
 //Esta es la manera de declarar variables gloables:
-app.config.globalProperties.$APIHeaders = {
-    headers:{
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YTcxYTExM2RkZGQ4ZDQ3NmU4YjhlMDdkYjgzYmI5ZCIsInN1YiI6IjY1MTlkOTY1MDcyMTY2MDEzOWM1ZDQ4MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fvwRaFzNROAhNcfeY1qE_fR1eUi4rKTly4QCrm8u-C4',
-        'accept': 'application/json',
-        'content-type': 'application/json'
-    }
-};
+// app.config.globalProperties.$APIHeaders = {
+//     headers:{
+//         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YTcxYTExM2RkZGQ4ZDQ3NmU4YjhlMDdkYjgzYmI5ZCIsInN1YiI6IjY1MTlkOTY1MDcyMTY2MDEzOWM1ZDQ4MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fvwRaFzNROAhNcfeY1qE_fR1eUi4rKTly4QCrm8u-C4',
+//         'accept': 'application/json',
+//         'content-type': 'application/json'
+//     }
+// };
 
 app.use(router);
 app.mount('#app');
