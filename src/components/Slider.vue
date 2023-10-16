@@ -81,6 +81,7 @@ export default {
         border-radius: .5rem;
         overflow: hidden;
         height: auto;
+        cursor: pointer;
     }
 
     .swiper-slide img {
@@ -100,13 +101,19 @@ export default {
         height: 100%;
         display: flex;
         align-items: center;
+        width: 5rem;
+        cursor: pointer;
     }
 
     .prev-btn {
-        background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7));
+        padding-left: .4rem;
     }
 
     .next-btn {
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7));
         right: 0;
+        padding-right: .4rem;
+        justify-content: end;
     }
 </style>
