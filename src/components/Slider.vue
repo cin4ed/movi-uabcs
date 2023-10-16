@@ -1,15 +1,21 @@
 <script>
-import Swiper from 'swiper';
 import 'swiper/css';
+import 'swiper/css/navigation';
+import Swiper from 'swiper';
 
 export default {
+    data() {
+        return {
+            swiper: null,
+        }
+    },
     props: {
         items: Object,
     },
     mounted() {
-        const swiper = new Swiper(".swiper-container", {
+        this.swiper = new Swiper(".swiper-container", {
             slidesPerView: 2,
-            slidesPerGroup: 1,
+            spaceBetween: 12,
             centeredSlides: true,
             loop: true,
             navigation: {
@@ -17,45 +23,25 @@ export default {
                 prevEl: '.swiper-button-prev',
             },
             breakpoints: {
-                // when window width is >= 600px
-                600: {
-                    slidesPerView: 2,
+                // when window width is >= 576px
+                576: {
+                    slidesPerView: 4,
                     slidesPerGroup: 2,
-                    spaceBetween: 5,
-                    centeredSlides: true
-
                 },
-                // when window width is >= 900px
-                900: {
-                    slidesPerView: 3,
-                    slidesPerGroup: 3,
-                    spaceBetween: 5,
-                    centeredSlides: false
-
+                // when window width is >= 768
+                768: {
+                    slidesPerView: 5,
+                    slidesPerGroup: 4,
+                },
+                // when window width is >= 992px
+                992: {
+                    slidesPerView: 6,
+                    slidesPerGroup: 6,
                 },
                 // when window width is >= 1200px
                 1200: {
-                    slidesPerView: 4,
-                    slidesPerGroup: 4,
-                    spaceBetween: 5,
-                    centeredSlides: false
-                },
-
-                // when window width is >= 1500px
-                1500: {
-                    slidesPerView: 5,
-                    slidesPerGroup: 5,
-                    spaceBetween: 5,
-                    centeredSlides: false
-                },
-
-                // when window width is >= 1800px
-                1800: {
                     slidesPerView: 8,
-                    slidesPerGroup: 8,
-                    spaceBetween: 12,
-                    centeredSlides: true,
-                    centeredSlidesBounds: true
+                    slidesPerGroup: 6,
                 }
             }
         });
@@ -63,6 +49,12 @@ export default {
     methods: {
         geturl(url) {
             return `http://image.tmdb.org/t/p/w500/${url}`;
+        },
+        slideNext() {
+            this.swiper.slideNext();
+        },
+        slidePrev() {
+            this.swiper.slidePrev();
         }
     }
 }
@@ -71,27 +63,50 @@ export default {
 <template>
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <div v-for="item in items" class="swiper-slide">
-                <div class="">
-                    <img :src="geturl(item.poster_path)" class="img-fluid img-undrag" alt="...">
-                </div>
+            <div v-for="item in items" class="swiper-slide shadow-sm">
+                <img :src="geturl(item.poster_path)" class="img-fluid img-undrag" alt="...">
             </div>
         </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
+        <div @click="slidePrev" class="fs-1 swiper-nav-btn prev-btn text-light"><i class="bi bi-arrow-left-short"></i></div>
+        <div @click="slideNext" class="fs-1 swiper-nav-btn next-btn text-light"><i class="bi bi-arrow-right-short"></i></div>
     </div>
 </template>
 
 <style scoped>
+    .swiper-container {
+        position: relative;
+    }
+
     .swiper-slide {
         border-radius: .5rem;
         overflow: hidden;
-        transition: all 300ms ease-in-out;
+        height: auto;
+    }
+
+    .swiper-slide img {
+        height: 100%;
+        width: auto;
     }
 
     .swiper-slide:hover {
         transform: scale(1.05);
         transition: all 300ms ease-in-out;
-        /* transition-delay: 300ms; */
+    }
+
+    .swiper-nav-btn {
+        position: absolute;
+        z-index: 1000;
+        top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .prev-btn {
+        background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+    }
+
+    .next-btn {
+        right: 0;
     }
 </style>
