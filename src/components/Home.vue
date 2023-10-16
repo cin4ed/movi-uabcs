@@ -59,40 +59,30 @@ export default {
             </div>
         </section>
     </div>
-    <div>
+    <div v-if="this.popularMovies.length > 0">
         <section>
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <h2 class="fw-bold text-uppercase fs-5 my-3">Películas populares</h2>
+                        <p class="text-uppercase my-3">Películas populares <i class="bi bi-arrow-right-square"></i></p>
                     </div>
                 </div>
             </div>
         </section>
         <Slider :items="popularMovies" />
     </div>
-    <div>
+    <div v-if="this.popularSeries.length > 0">
         <section>
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <h2 class="fw-bold text-uppercase fs-5 my-3">Series populares</h2>
+                        <p class="text-uppercase my-3">Series populares <i class="bi bi-arrow-right-square"></i></p>
                     </div>
                 </div>
             </div>
         </section>
         <Slider :items="popularSeries" />
     </div>
-
-    <!-- <footer class="text-body-secondary py-5">
-  <div class="container">
-    <p class="float-end mb-1">
-      <a href="#">Back to top</a>
-    </p>
-    <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-    <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="/docs/5.3/getting-started/introduction/">getting started guide</a>.</p>
-  </div>
-</footer> -->
 </template>
 
 <style scoped>
