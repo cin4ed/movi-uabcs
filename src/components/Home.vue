@@ -1,13 +1,19 @@
 <script>
 import { resolveTransitionHooks } from 'vue';
 import Slider from './Slider.vue';
+import CarouselObj from './CarouselM.vue';
 import axios from 'axios';
 
 export default {
     data() {
         return {
             popularMovies: [],
-            popularSeries: []
+            popularSeries: [],
+            trailerLinks: ['https://api.themoviedb.org/3/trending/all/week?api_key=6a71a113dddd8d476e8b8e07db83bb9d',
+                                'https://api.themoviedb.org/3/trending/tv/week?api_key=6a71a113dddd8d476e8b8e07db83bb9d',
+                                'https://api.themoviedb.org/3/movie/now_playing?page=1&api_key=6a71a113dddd8d476e8b8e07db83bb9d',
+                                'https://api.themoviedb.org/3/tv/airing_today?page=4&api_key=6a71a113dddd8d476e8b8e07db83bb9d'],
+            trailerHeaders: ['Popular','En TV','En cines', 'Streaming'],
         }
     },
     mounted() {
@@ -36,6 +42,7 @@ export default {
     },
     components: {
         Slider,
+        CarouselObj,
     },
 }
 </script>
@@ -83,17 +90,29 @@ export default {
         </section>
         <Slider :items="popularSeries" />
     </div>
+    <div>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <p class="text-uppercase my-3">Series populares <i class="bi bi-arrow-right-square"></i></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <CarouselObj :title="trailerHeaders" :request="this.trailerLinks" :video="true"></CarouselObj>
+    </div>
 </template>
 
 <style scoped>
-.banner {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('movies-banner.jpeg');
-    padding: 2rem 0;
-}
-
-@media (min-width: 1200px) {
     .banner {
-        height: 450px;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('movies-banner.jpeg');
+        padding: 2rem 0;
     }
-}
+
+    @media (min-width: 1200px) {
+        .banner {
+            height: 450px;
+        }
+    }
 </style>
