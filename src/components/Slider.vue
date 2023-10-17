@@ -3,10 +3,13 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import Swiper from 'swiper';
 
+let sliderCount = 0;
+
 export default {
     data() {
         return {
             swiper: null,
+            sliderId: undefined,
         }
     },
     props: {
@@ -45,16 +48,25 @@ export default {
                 }
             }
         });
+
+        sliderCount++;
+        this.sliderId = sliderCount;
     },
     methods: {
         geturl(url) {
             return `http://image.tmdb.org/t/p/w500/${url}`;
         },
         slideNext() {
-            this.swiper.slideNext();
+            if (Array.isArray(this.swiper))
+                this.swiper[this.sliderId - 1].slideNext();
+            else
+                this.swiper.slideNext();
         },
         slidePrev() {
-            this.swiper.slidePrev();
+            if (Array.isArray(this.swiper))
+                this.swiper[this.sliderId - 1].slidePrev();
+            else
+                this.swiper.slidePrev();
         }
     }
 }
