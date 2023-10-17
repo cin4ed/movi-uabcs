@@ -15,6 +15,9 @@ export default {
     props: {
         items: Object,
     },
+    emits: [
+        'itemClick',
+    ],
     mounted() {
         this.swiper = new Swiper(".swiper-container", {
             slidesPerView: 2,
@@ -67,6 +70,9 @@ export default {
                 this.swiper[this.sliderId - 1].slidePrev();
             else
                 this.swiper.slidePrev();
+        },
+        handleItemClick(id) {
+            this.$emit("itemClick", id);
         }
     }
 }
@@ -76,7 +82,7 @@ export default {
     <div class="swiper-container">
         <div class="swiper-wrapper">
             <div v-for="item in items" class="swiper-slide shadow-sm">
-                <img :src="geturl(item.poster_path)" class="img-fluid img-undrag" alt="...">
+                <img :src="geturl(item.poster_path)" class="img-fluid img-undrag" @click="() => handleItemClick(item.id)" alt="...">
             </div>
         </div>
         <div @click="slidePrev" class="fs-1 swiper-nav-btn prev-btn text-light"><i class="bi bi-arrow-left-short"></i></div>
