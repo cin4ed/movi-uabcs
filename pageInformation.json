@@ -1,0 +1,16 @@
+{        
+    "headers":[
+        {
+            "pageName": "Movie World"
+        }
+    ],
+    "colors":[
+        {
+            "c1":"#0C25F2",
+            "c2":"#0D65FC",
+            "c3":"#0090E6",
+            "c4":"#0DE4FC",
+            "c5":"#0CF2CB"
+        }
+    ]
+}
