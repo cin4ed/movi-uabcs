@@ -156,7 +156,7 @@
       </div>
     </section>
     <!-- Reseñas -->
-    <section class="container pt-3" v-if="reviews.length">
+    <section class="container pt-3" v-if="reviews.length > 0">
       <div class="row justify-content-center">
         <div class="col-11">
           <h4>Reseñas</h4>
