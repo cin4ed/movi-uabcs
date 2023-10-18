@@ -43,7 +43,6 @@
                         user-select: none; border-radius: 5px; border: 1px lightgray solid; position: relative; left: 80px; top: -320px;">
                         <div class="carouselm-select-action" style="padding: 5px 2px;" @click="console.log(movie.id); movie[5]=false; addToList((movie.media_type == 'movie' ? true : false), movie.id, true);    ">Favorite</div>
                         <div class="carouselm-select-action" style="padding: 5px 2px;" @click="console.log(movie.id); movie[5]=false; addToList((movie.media_type == 'movie' ? true : false), movie.id, false);    ">Watchlist</div>
-                        <div class="carouselm-select-action" style="padding: 5px 2px;" @click="console.log(movie.id); movie[5]=false;">Rating</div>
                     </div>
                 </li>
             </ul>
@@ -88,9 +87,8 @@
                         align-content: center;" @click="movie[5]=true">•••</p>
                         <div v-if="movie[5]" style="width: 80px; background-color: white; padding: 5px 0px; display: flex; flex-direction: column; gap: 5px;
                             user-select: none; border-radius: 5px; border: 1px lightgray solid; position: relative; left: 210px; top: -200px;">
-                            <div class="carouselm-select-action" style="padding: 0px 2px;">Favorite</div>
-                            <div class="carouselm-select-action" style="padding: 0px 2px;">Watchlist</div>
-                            <div class="carouselm-select-action" style="padding: 0px 2px;">Rating</div>
+                            <div class="carouselm-select-action" style="padding: 5px 2px;" @click="console.log(movie[4]); movie[5]=false; addToList((movie[4] == 'movie' ? true : false), movie[1], true);    ">Favorite</div>
+                            <div class="carouselm-select-action" style="padding: 5px 2px;" @click="console.log(movie[4]); movie[5]=false; addToList((movie[4] == 'movie' ? true : false), movie[1], false);    ">Watchlist</div>
                         </div>
                     </li>
                 </ul>
@@ -149,6 +147,8 @@
                     mediaTypeString = 'movie';
                 else
                     mediaTypeString = 'tv';
+
+                console.log("es: "+mediaTypeString)
 
                 listSelector = favoriteOrWatchlist == true ? 'favorite' : 'watchlist';
 
@@ -217,7 +217,7 @@
                                         .then((tresp)=>{
                                             videokey = tresp.data.results[0].key;
                                             videoname = tresp.data.results[0].name;
-                                            values = [backdrop.file_path, resp.data.results[x].id, videokey, videoname];
+                                            values = [backdrop.file_path, resp.data.results[x].id, videokey, videoname,resp.data.results[x].media_type];
                                             this.movieData.push(values);
                                         })
                                         .catch((error) => {
