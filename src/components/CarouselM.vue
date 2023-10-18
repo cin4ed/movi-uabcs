@@ -16,7 +16,7 @@
     z
     El arreglo que se utilice es seleccionado utilizando la variable index
  -->
-<template>
+ <template>
     <div style="width: 100%;">
         <div v-if="!loading && !video" class="carousel" style="overflow: hidden;">
             <br>
@@ -138,6 +138,8 @@
             };
         },
         mounted(){
+            console.log(localStorage.getItem("sessionID"));
+            console.log(localStorage.getItem('sessionKey'));
             this.rechargeCarousel();
         },
         methods:{
