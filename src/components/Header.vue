@@ -47,36 +47,38 @@ export default {
     <div class="big-nav">
       <div class="navbar">
         <div class="container">
-          <div class="container d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <div class="container d-flex flex-wrap align-items-center justify-content-between">
             <a href="/" class="navbar-brand d-flex align-items-center">
               <i class="bi bi-film"></i>
               <strong>&nbsp;Movi</strong>
             </a>
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <!-- <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
               <li><a href="#" class="nav-link px-2 link-body-emphasis">Películas</a></li>
               <li><a href="#" class="nav-link px-2 link-body-emphasis">Series</a></li>
               <li><a href="#" class="nav-link px-2 link-body-emphasis">Personas</a></li>
               <li><a href="#" class="nav-link px-2 link-body-emphasis">Más</a></li>
-            </ul>
+            </ul> -->
             <!-- TODO: Implement searching -->
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-              <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-            </form>
-            <div class="dropdown text-end">
-              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <!-- TODO: Change image to match current user -->
-                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-              </a>
-              <ul class="dropdown-menu text-small">
-                <li><a class="dropdown-item" href="#">Settings</a></li> <!-- Decoration -->
-                <li><a class="dropdown-item" href="#">Profile</a></li> <!-- Decoration -->
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <!-- TODO: Implement sign out -->
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
-              </ul>
+            <div class="d-flex align-items-center">
+              <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+              </form>
+              <div class="dropdown text-end">
+                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <!-- TODO: Change image to match current user -->
+                  <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small">
+                  <li><a class="dropdown-item" href="#">Settings</a></li> <!-- Decoration -->
+                  <li><a class="dropdown-item" href="#">Profile</a></li> <!-- Decoration -->
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <!-- TODO: Implement sign out -->
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

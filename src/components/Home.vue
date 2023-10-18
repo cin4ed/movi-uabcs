@@ -101,7 +101,7 @@ export default {
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <p class="text-uppercase my-3">Series populares <i class="bi bi-arrow-right-square"></i></p>
+                        <p class="text-uppercase my-3">Más... <i class="bi bi-arrow-right-square"></i></p>
                     </div>
                 </div>
             </div>
