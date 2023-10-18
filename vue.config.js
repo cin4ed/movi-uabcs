@@ -1,3 +1,4 @@
+
 module.exports = {
-    publicPath: "/movi-uabcs/",
-  };
+  baseUrl: "something"
+}
