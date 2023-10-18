@@ -6,12 +6,12 @@
     <h3>☆{{ seriesData.vote_average }}</h3>
     <h3>{{ seriesData.number_of_seasons }} Temporadas</h3>
     <h2>{{ seriesData.overview }}</h2>
-    <!-- Ahora puedes iterar sobre las temporadas -->
     <div v-for="season in seasonsData" :key="season.id">
       <h3>Temporada {{ season.season_number }}</h3>
       <p>{{ season.air_date }}</p>
       <p>{{ season.episode_count }} Episodios</p>
       <p>{{ season.overview }}</p>
+      <img :src="'https://www.themoviedb.org/t/p/w130_and_h195_bestv2/' + season.poster_path">
     </div>
   </div>
   <p v-else>Cargando...</p>
@@ -41,13 +41,12 @@ export default {
     };
   },
   mounted() {
-    // Realiza una solicitud para obtener la información de la serie
     app.axios.get('https://api.themoviedb.org/3/tv/' + this.serieId + '?api_key=6a71a113dddd8d476e8b8e07db83bb9d&language=es-MX')
       .then((resp) => {
         this.seriesData = resp.data;
         this.loading = false;
         
-        // Ahora, para cada temporada, realiza una solicitud para obtener detalles
+    
         this.fetchSeasonDetails(this.serieId, this.seriesData.number_of_seasons);
       })
       .catch((error) => {

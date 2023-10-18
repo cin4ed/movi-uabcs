@@ -3,15 +3,21 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import Swiper from 'swiper';
 
+let sliderCount = 0;
+
 export default {
     data() {
         return {
             swiper: null,
+            sliderId: undefined,
         }
     },
     props: {
         items: Object,
     },
+    emits: [
+        'itemClick',
+    ],
     mounted() {
         this.swiper = new Swiper(".swiper-container", {
             slidesPerView: 2,
@@ -45,16 +51,28 @@ export default {
                 }
             }
         });
+
+        sliderCount++;
+        this.sliderId = sliderCount;
     },
     methods: {
         geturl(url) {
             return `http://image.tmdb.org/t/p/w500/${url}`;
         },
         slideNext() {
-            this.swiper.slideNext();
+            if (Array.isArray(this.swiper))
+                this.swiper[this.sliderId - 1].slideNext();
+            else
+                this.swiper.slideNext();
         },
         slidePrev() {
-            this.swiper.slidePrev();
+            if (Array.isArray(this.swiper))
+                this.swiper[this.sliderId - 1].slidePrev();
+            else
+                this.swiper.slidePrev();
+        },
+        handleItemClick(id) {
+            this.$emit("itemClick", id);
         }
     }
 }
@@ -64,7 +82,7 @@ export default {
     <div class="swiper-container">
         <div class="swiper-wrapper">
             <div v-for="item in items" class="swiper-slide shadow-sm">
-                <img :src="geturl(item.poster_path)" class="img-fluid img-undrag" alt="...">
+                <img :src="geturl(item.poster_path)" class="img-fluid img-undrag" @click="() => handleItemClick(item.id)" alt="...">
             </div>
         </div>
         <div @click="slidePrev" class="fs-1 swiper-nav-btn prev-btn text-light"><i class="bi bi-arrow-left-short"></i></div>
@@ -81,6 +99,7 @@ export default {
         border-radius: .5rem;
         overflow: hidden;
         height: auto;
+        cursor: pointer;
     }
 
     .swiper-slide img {
@@ -100,13 +119,19 @@ export default {
         height: 100%;
         display: flex;
         align-items: center;
+        width: 5rem;
+        cursor: pointer;
     }
 
     .prev-btn {
-        background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7));
+        padding-left: .4rem;
     }
 
     .next-btn {
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7));
         right: 0;
+        padding-right: .4rem;
+        justify-content: end;
     }
 </style>

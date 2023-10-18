@@ -38,6 +38,12 @@ export default {
     methods: {
         getMovieImage(url) {
             return `http://image.tmdb.org/t/p/w500/${url}`;
+        },
+        goToMovie(id) {
+            this.$router.push(`/movie/${id}`);
+        },
+        goToSerie(id) {
+            this.$router.push(`/serie/${id}`);
         }
     },
     components: {
@@ -76,7 +82,7 @@ export default {
                 </div>
             </div>
         </section>
-        <Slider :items="popularMovies" />
+        <Slider :items="popularMovies" @item-click="goToMovie" />
     </div>
     <div v-if="this.popularSeries.length > 0">
         <section>
@@ -88,7 +94,7 @@ export default {
                 </div>
             </div>
         </section>
-        <Slider :items="popularSeries" />
+        <Slider :items="popularSeries" @item-click="goToSerie" />
     </div>
     <div>
         <section>
