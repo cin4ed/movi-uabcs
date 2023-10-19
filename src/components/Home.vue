@@ -1,5 +1,4 @@
 <script>
-import { resolveTransitionHooks } from 'vue';
 import Slider from './Slider.vue';
 import CarouselObj from './CarouselM.vue';
 import axios from 'axios';
@@ -112,7 +111,7 @@ export default {
 
 <style scoped>
     .banner {
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('movies-banner.jpeg');
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('/src/assets/movies-banner.jpeg');
         padding: 2rem 0;
     }
 
